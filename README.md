@@ -128,7 +128,7 @@ graph TD
 ## 📊 Status do Modelo
 
 **Versão:** 1.0  
-**Última Atualização:** Dezembro 2024  
+**Última Atualização:** Novembro 2024  
 **Ambientes:** Produção, Homologação, Desenvolvimento  
 
 ---
