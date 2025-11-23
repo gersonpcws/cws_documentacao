@@ -2,9 +2,6 @@
 
 
 # 📊 Tabela: `dvendedores`
-
-Aqui está o conteúdo transformado para **Markdown**, com estrutura organizada e limpa:
-
 ---
 
 ## 📌 Descrição Geral
@@ -161,6 +158,8 @@ Descrição textual da segmentação comercial.
 
 Divisão comercial à qual o vendedor pertence (ex.: AUTO, METAL, MANUTENÇÃO).
 
+**Tabela Técnica**
+
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -202,11 +201,132 @@ Divisão comercial à qual o vendedor pertence (ex.: AUTO, METAL, MANUTENÇÃO).
 | division                     | VARCHAR(30)      | Divisão comercial                                                         | —                      |
 
 ---
+# Tabela: fVendas
 
-## 🧾 Tabela: `ólendas` (Fato de Vendas)
+## Descrição Geral
 
-**Descrição Geral**  
-Tabela fato central que consolida todas as transações comerciais. Cada registro representa uma linha de pedido.
+A tabela **fVendas** é a tabela fato central do modelo analítico, responsável por consolidar todas as transações comerciais registradas no ambiente de vendas.
+Cada registro representa uma linha de pedido (item vendido), incluindo informações sobre valores financeiros, descontos, tributos, quantidades e dados de relacionamento com clientes, vendedores e canais de venda.
+Essa estrutura é utilizada para medir indicadores como faturamento, ticket médio, volume de pedidos, margem de lucro e desempenho por canal, região ou vendedor.
+
+---
+
+## Descrição das Colunas
+
+### **amount_charged (DECIMAL(18,2))**
+
+Valor total cobrado na venda, calculado a partir da multiplicação de preço unitário pela quantidade, somado a impostos e juros aplicáveis.
+
+### **avg_credit_card_interest (DECIMAL(10,4))**
+
+Média dos juros cobrados em vendas realizadas por meio de cartão de crédito, útil para análise de custo financeiro e margem líquida.
+
+### **avg_total_tax (DECIMAL(10,4))**
+
+Valor médio dos tributos aplicados sobre os pedidos, utilizado em estudos de carga tributária e precificação.
+
+### **cart_order_id (INTEGER)**
+
+Identificador do carrinho de compras vinculado ao pedido, permitindo rastrear o processo de compra digital antes da confirmação da venda.
+
+### **client_account_id (INTEGER)**
+
+Chave estrangeira que referencia o cliente comprador na dimensão de clientes.
+Usada para análises de comportamento de compra e fidelização.
+
+### **coupon_id (VARCHAR(50))**
+
+Identificador do cupom de desconto aplicado ao pedido, utilizado para mensurar o impacto de campanhas promocionais e estratégias de marketing.
+
+### **datekey (INTEGER)**
+
+Chave temporal no formato AAAAMMDD que indica a data da transação.
+Relaciona-se diretamente com a dimensão de calendário.
+
+### **datekey_faturamento (INTEGER)**
+
+Chave temporal representando a data de faturamento da venda, permitindo distinguir entre criação e faturamento efetivo do pedido.
+
+### **device_id (VARCHAR(50))**
+
+Identificador do dispositivo ou plataforma de compra (desktop, aplicativo, mobile), usado em análises de canal digital.
+
+### **discount_value (DECIMAL(18,2))**
+
+Valor total de descontos aplicados na transação, incluindo reduções promocionais, cupons e ajustes comerciais.
+
+### **invoice (VARCHAR(50))**
+
+Número da nota fiscal vinculada à venda, utilizado para rastreabilidade fiscal e contábil.
+
+### **marketplace (VARCHAR(50))**
+
+Canal de origem da transação (e-commerce próprio, marketplace, venda direta), útil para comparações entre canais de venda.
+
+### **median_charged_shipping (DECIMAL(18,2))**
+
+Valor mediano de frete cobrado ao cliente, utilizado para controle logístico e análise de custos de entrega.
+
+### **order_status_id (INTEGER)**
+
+Identificador numérico do status do pedido (pendente, pago, faturado, cancelado), essencial para monitoramento operacional.
+
+### **order_subtotal (DECIMAL(18,2))**
+
+Subtotal do pedido antes da aplicação de impostos, frete e juros.
+Usado em cálculos de margem e comparativos de precificação.
+
+### **order_total (DECIMAL(18,2))**
+
+Valor final do pedido, incluindo impostos, frete e eventuais juros.
+Representa o faturamento líquido da venda.
+
+### **order_type_id (INTEGER)**
+
+Código que define o tipo de pedido (venda, devolução, amostra, transferência etc.), utilizado para segmentação transacional.
+
+### **partner_id (INTEGER)**
+
+Identificador do parceiro comercial responsável pela venda, quando aplicável (como distribuidores ou integradores).
+
+### **partner_order_id (VARCHAR(50))**
+
+Identificador do pedido no sistema do parceiro, usado em integrações externas e processos de conciliação.
+
+### **payment_method_id (INTEGER)**
+
+Identificador do método de pagamento utilizado (boleto, cartão, PIX, transferência bancária).
+
+### **quantity (INTEGER)**
+
+Quantidade total de unidades vendidas no item do pedido.
+Campo essencial para cálculos de ticket médio e volume total de vendas.
+
+### **salesperson_account_id (INTEGER)**
+
+Identificador do vendedor responsável pela venda, permitindo relacionar transações à dimensão de vendedores.
+
+### **salesperson_document (VARCHAR(20))**
+
+Documento (CPF ou CNPJ) do vendedor responsável, usado para validações fiscais e integrações.
+
+### **shipping_type_id (INTEGER)**
+
+Tipo de envio associado à entrega (Correios, transportadora, retirada em loja), usado para análises logísticas e de SLA.
+
+### **site_id (INTEGER)**
+
+Identificador do site ou ambiente digital onde a venda foi registrada, facilitando análises por canal de origem.
+
+### **sku_id (INTEGER)**
+
+Identificador único do produto (SKU) vendido, usado como chave estrangeira para a dimensão de produtos.
+
+### **unit_price (DECIMAL(18,2))**
+---
+
+**Tabela técnina**  
+
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -241,9 +361,163 @@ Tabela fato central que consolida todas as transações comerciais. Cada registr
 ---
 
 ## 👥 Tabela: `dClientes`
+---
+## Descrição Geral
 
-**Descrição Geral**  
-Dimensão que consolida informações cadastrais, financeiras, geográficas e de relacionamento dos clientes.
+A tabela **dClientes** é uma dimensão que consolida as informações cadastrais, financeiras, geográficas e de relacionamento dos clientes registrados no sistema.
+Cada linha representa um cliente único, com detalhes que permitem analisar perfil de compra, origem, comportamento comercial, limites de crédito e relacionamento com vendedores.
+Ela serve como base para integrações com fatos de vendas, análises de retenção, segmentação de mercado, inadimplência e performance comercial por região ou segmento.
+
+---
+## Descrição das Colunas
+
+### **account_age_days (INTEGER)**
+
+Representa o tempo de existência da conta em dias, calculado a partir da data de criação.
+É útil para análises de tempo médio de relacionamento e fidelização do cliente.
+
+### **account_create_date (DATE)**
+
+Data em que o cliente foi cadastrado no sistema, servindo como marco inicial do relacionamento comercial.
+
+### **account_id (INTEGER)**
+
+Identificador único da conta associada ao cliente.
+Utilizado como chave primária na dimensão e em junções com tabelas fato.
+
+### **account_origin (VARCHAR(50))**
+
+Canal de origem do cadastro do cliente, como “Aplicativo”, “Plataforma Web” ou “Integração Externa”.
+Permite avaliar a origem dos cadastros e a efetividade de canais de aquisição.
+
+### **account_user (VARCHAR(150))**
+
+Nome de usuário ou e-mail de login do cliente no sistema.
+Utilizado para fins de auditoria e autenticação.
+
+### **age (INTEGER)**
+
+Idade do cliente, calculada a partir da data de nascimento (quando informada).
+Apoia análises demográficas e segmentação por faixa etária.
+
+### **city (VARCHAR(100))**
+
+Cidade de residência ou sede principal do cliente, utilizada em relatórios geográficos e de cobertura de atendimento.
+
+### **client_create_date (DATE)**
+
+Data de criação formal do registro do cliente, útil para monitorar o crescimento da base.
+
+### **client_id (INTEGER)**
+
+Identificador único do cliente no sistema ERP ou plataforma de origem.
+É a chave principal de integração com fatos e outras dimensões.
+
+### **client_last_updated (DATE)**
+
+Data da última atualização das informações cadastrais, utilizada para controle de versionamento e atualizações recentes.
+
+### **client_status (VARCHAR(20))**
+
+Status atual do cliente (ex.: “Ativo”, “Inativo”, “Bloqueado”), permitindo análises de base ativa e churn.
+
+### **CNAE (VARCHAR(15))**
+
+Código da Classificação Nacional de Atividades Econômicas.
+Identifica o ramo de atuação do cliente e apoia análises por segmento de mercado.
+
+### **contact (VARCHAR(150))**
+
+Nome do contato principal do cliente.
+Usado em comunicações diretas e gestão de relacionamento (CRM).
+
+### **country (VARCHAR(50))**
+
+País de origem do cliente, geralmente “Brasil”, podendo conter registros internacionais.
+
+### **credit_balance (DECIMAL(18,2))**
+
+Saldo atual de crédito disponível para o cliente, representando o montante ainda utilizável em compras a prazo.
+
+### **credit_limit (DECIMAL(18,2))**
+
+Limite total de crédito concedido ao cliente.
+Comparado com o saldo para identificar exposição financeira e risco de inadimplência.
+
+### **datekey (INTEGER)**
+
+Chave temporal no formato AAAAMMDD.
+Relaciona-se à dimensão de calendário para análises históricas e sazonais.
+
+### **document (VARCHAR(20))**
+
+Documento fiscal do cliente (CPF ou CNPJ), utilizado para validação, emissão de notas fiscais e controle de duplicidade.
+
+### **gender (VARCHAR(20))**
+
+Gênero do cliente, aplicável para pessoas físicas, utilizado em análises de perfil.
+
+### **line (VARCHAR(50))**
+
+Categoria comercial ou linha de produtos predominante do cliente.
+Usado para segmentar a carteira por área de interesse.
+
+### **name (VARCHAR(150))**
+
+Nome completo ou razão social do cliente, campo principal de identificação.
+
+### **person_type (VARCHAR(10))**
+
+Define se o cliente é Pessoa Física (PF) ou Pessoa Jurídica (PJ).
+Afeta regras tributárias e políticas de crédito.
+
+### **phone_number (VARCHAR(20))**
+
+Número de telefone principal para contato.
+Usado em automações e cadastros de comunicação.
+
+### **region (VARCHAR(30))**
+
+Região geográfica derivada do estado (ex.: Sul, Sudeste, Nordeste).
+Usada em relatórios e agrupamentos regionais.
+
+### **salesperson_account_id (INTEGER)**
+
+Identificador do vendedor responsável pelo cliente, permitindo associar contas a representantes comerciais.
+
+### **salesperson_document (VARCHAR(20))**
+
+Documento (CPF) do vendedor responsável, usado para validação e rastreamento.
+
+### **segment_description (VARCHAR(100))**
+
+Descrição textual do segmento de mercado em que o cliente atua (ex.: Autopeças, Indústria, Serviços).
+
+### **site_id (INTEGER)**
+
+Identificador do site, canal ou ambiente digital onde o cliente foi cadastrado.
+
+### **state (VARCHAR(50))**
+
+Nome completo do estado do cliente.
+Permite agrupamento territorial em relatórios.
+
+### **total_credit_limit (DECIMAL(18,2))**
+
+Limite total de crédito disponível ao cliente.
+Usado para cálculo de exposição e classificação de risco financeiro.
+
+### **UF (VARCHAR(5))**
+
+Sigla da Unidade Federativa correspondente ao endereço (ex.: SP, RJ, MG).
+
+### **zip_code (VARCHAR(15))**
+
+Código postal (CEP) do endereço principal do cliente.
+
+---
+
+**Tabela Técnica**  
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -282,10 +556,148 @@ Dimensão que consolida informações cadastrais, financeiras, geográficas e de
 
 ---
 
-## 🤝 Tabela: `dAssociados`
+# 🤝 Tabela: `dAssociados`
+---
 
-**Descrição Geral**  
-Dimensão que reúne informações sobre parceiros comerciais, distribuidores, transportadoras e outras entidades associadas.
+## Descrição Geral
+
+A tabela **dAssociados** é uma dimensão que reúne informações sobre parceiros comerciais, distribuidores, transportadoras e outros tipos de entidades associadas ao negócio. Cada linha representa um parceiro único, com dados cadastrais, operacionais e logísticos que permitem identificar o tipo de relacionamento mantido, a abrangência de atuação e as condições de integração comercial.
+Essa dimensão é amplamente utilizada em análises B2B, logísticas e de performance de rede, auxiliando no entendimento da infraestrutura de entrega e da cobertura nacional.
+---
+
+## Descrição das Colunas
+
+### **city (VARCHAR(100))**
+
+Nome da cidade onde o parceiro ou distribuidor está localizado.
+Usado em relatórios regionais e análises de capilaridade logística.
+
+### **company_name (VARCHAR(150))**
+
+Razão social completa da empresa associada, registrada para fins legais e fiscais.
+
+### **copartner_id (INTEGER)**
+
+Identificador único do parceiro comercial.
+É a chave primária da dimensão e serve como referência em junções com fatos de transações ou indicadores operacionais.
+
+### **correios (BOOLEAN)**
+
+Indica se o parceiro realiza entregas por meio dos Correios.
+Campo útil para controle de canais logísticos.
+
+### **country (VARCHAR(50))**
+
+País de origem ou operação do parceiro comercial.
+
+### **cupon_habilitado (BOOLEAN)**
+
+Indica se o parceiro aceita cupons promocionais em suas operações.
+
+### **datekey (INTEGER)**
+
+Chave de data no formato AAAAMMDD que representa o vínculo temporal de registro ou atualização do parceiro.
+Usada para relacionamentos com a dimensão de tempo.
+
+### **document (VARCHAR(20))**
+
+Documento fiscal do parceiro (CNPJ ou CPF).
+Utilizado para controle de identidade e validações fiscais.
+
+### **ecommerce_habilitado (BOOLEAN)**
+
+Indica se o parceiro possui integração ativa com plataformas de e-commerce.
+
+### **entrega_economica (BOOLEAN)**
+
+Identifica se o parceiro oferece modalidade de frete econômico, relevante para análises de custo logístico.
+
+### **estados_b2b (VARCHAR(255))**
+
+Lista ou código dos estados onde o parceiro opera no modelo B2B (Business-to-Business).
+
+### **estados_b2c (VARCHAR(255))**
+
+Lista ou código dos estados onde o parceiro opera no modelo B2C (Business-to-Consumer).
+
+### **frota_propria (BOOLEAN)**
+
+Indica se o parceiro possui frota própria para entregas e transporte de produtos.
+
+### **last_update_date (DATE)**
+
+Data da última atualização dos dados do parceiro.
+Permite controle de manutenção e sincronização cadastral.
+
+### **loggi (BOOLEAN)**
+
+Indica se o parceiro possui integração com o serviço Loggi, relevante para entregas rápidas.
+
+### **loja_configurada (BOOLEAN)**
+
+Sinaliza se o parceiro possui loja ou hub configurado dentro do sistema.
+
+### **melhor_envio (BOOLEAN)**
+
+Indica se o parceiro utiliza integração com o serviço de logística Melhor Envio.
+
+### **partner (VARCHAR(150))**
+
+Nome comercial ou identificação principal do parceiro.
+Campo complementar ao *company_name* para exibição em relatórios.
+
+### **partner_type (VARCHAR(50))**
+
+Classificação do tipo de parceiro — como distribuidor, transportadora, fornecedor ou integrador.
+
+### **partnership_date (DATE)**
+
+Data de início do relacionamento comercial ou parceria.
+Usada para acompanhar a evolução e o tempo de vínculo.
+
+### **plataform_status (VARCHAR(30))**
+
+Status da integração ou vínculo do parceiro na plataforma (ativo, inativo, pendente).
+
+### **retirada_loja (BOOLEAN)**
+
+Indica se o parceiro oferece a opção de retirada de pedidos em loja física.
+
+### **state (VARCHAR(50))**
+
+Nome completo do estado onde o parceiro está localizado.
+
+### **street_address (VARCHAR(255))**
+
+Endereço completo da sede ou ponto de atendimento principal do parceiro.
+
+### **trading_name (VARCHAR(100))**
+
+Nome fantasia utilizado comercialmente, exibido em relatórios e comunicações.
+
+### **trading_name_cut1 (VARCHAR(50))**
+
+Versão abreviada do nome fantasia.
+Usada em relatórios compactos ou sistemas com limitação de caracteres.
+
+### **transportadoras (VARCHAR(255))**
+
+Lista ou código das transportadoras com as quais o parceiro opera.
+
+### **uf (VARCHAR(5))**
+
+Sigla da Unidade Federativa correspondente ao endereço.
+
+### **wirecard (BOOLEAN)**
+
+Indica se o parceiro possui integração ativa com o sistema de pagamento Wirecard.
+
+### **zip_code (VARCHAR(15))**
+
+Código postal (CEP) do endereço principal.
+
+---
+**Tabela Técnica**  
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -322,10 +734,181 @@ Dimensão que reúne informações sobre parceiros comerciais, distribuidores, t
 
 ---
 
-## 📅 Tabela: `dCalendario`
+# 📅 Tabela: `dCalendario`
 
-**Descrição Geral**  
-Dimensão temporal fundamental. Cada linha representa uma data única, com atributos para análises em diferentes níveis.
+## Descrição Geral
+
+A tabela **dCalendario** é uma dimensão temporal fundamental no modelo analítico.
+Cada linha representa uma data única, contendo atributos que permitem análises em diferentes níveis de granularidade: dia, semana, mês, trimestre e ano.
+Essa dimensão é utilizada em todos os relacionamentos temporais entre fatos, possibilitando comparação de períodos, análises sazonais, cálculos de indicadores acumulados e definição de períodos fiscais.
+
+---
+
+## Descrição das Colunas
+
+### **Ano (INTEGER)**
+
+Ano civil correspondente à data. Utilizado em agrupamentos e filtros de relatórios anuais.
+
+### **AnoFiscal (INTEGER)**
+
+Ano fiscal da organização, que pode divergir do ano civil. Facilita o controle de períodos contábeis.
+
+### **AnoMes (VARCHAR(10))**
+
+Combinação entre ano e mês no formato AAAAMM.
+Usado para agrupamentos mensais e comparações de evolução de períodos.
+
+### **AnoMes_Fechamento (VARCHAR(10))**
+
+Identifica o período de fechamento fiscal ou contábil.
+Usado em análises de encerramento de ciclo.
+
+### **AnoMesDia (VARCHAR(15))**
+
+Concatenação de ano, mês e dia (AAAAMMDD).
+Representa a granularidade máxima temporal.
+
+### **AnoSemana (INTEGER)**
+
+Número da semana no ano civil (1 a 52).
+Essencial para relatórios semanais e ciclos curtos.
+
+### **AnoTrimestre (VARCHAR(10))**
+
+Combinação entre o ano e o trimestre correspondente.
+Facilita agrupamentos trimestrais.
+
+### **Data (DATE)**
+
+Campo que armazena a data completa.
+É a base para todas as derivações temporais.
+
+### **datekey (INTEGER)**
+
+Chave de data no formato AAAAMMDD.
+Utilizada como chave primária na dimensão e chave estrangeira nas tabelas fato.
+
+### **Dia (INTEGER)**
+
+Número do dia dentro do mês (1–31).
+
+### **Dia_Semana (INTEGER)**
+
+Número do dia dentro da semana (1 para domingo, 7 para sábado).
+
+### **DiaÚtil (BOOLEAN)**
+
+Indica se o dia é considerado útil (exclui sábados, domingos e feriados).
+
+### **Feriado (BOOLEAN)**
+
+Sinaliza se a data é feriado nacional.
+Usado para análises de sazonalidade e impacto de calendário.
+
+### **Futuro (BOOLEAN)**
+
+Indica se a data pertence a um período futuro em relação à data atual.
+Auxilia em filtros de previsões ou planos futuros.
+
+### **Hoje (BOOLEAN)**
+
+Marca a data atual (TRUE somente para o dia corrente).
+
+### **Mês (INTEGER)**
+
+Número do mês (1–12).
+
+### **Mês_Atual (BOOLEAN)**
+
+Sinaliza se a data pertence ao mês corrente.
+
+### **Mês_Completo (VARCHAR(20))**
+
+Nome completo do mês, por extenso (ex.: Janeiro, Fevereiro).
+
+### **Mês_Fiscal (INTEGER)**
+
+Número do mês no calendário fiscal, podendo diferir do mês civil.
+
+### **Mês/Ano (VARCHAR(10))**
+
+Combinação textual do mês e ano (ex.: Jan/2025).
+Utilizada em relatórios sintéticos e gráficos temporais.
+
+### **Mês/Ano_Fechamento (VARCHAR(10))**
+
+Período fiscal de fechamento mensal.
+
+### **MesNo (INTEGER)**
+
+Índice sequencial do mês dentro do ano.
+
+### **Nome_Dia (VARCHAR(15))**
+
+Nome completo do dia da semana (ex.: Segunda-feira).
+
+### **Nome_Dia_abv (VARCHAR(5))**
+
+Abreviação do nome do dia (ex.: Seg, Ter).
+
+### **Offset_Ano (INTEGER)**
+
+Diferença entre o ano corrente e o ano da data.
+
+### **Offset_Dia (INTEGER)**
+
+Diferença em dias em relação à data atual.
+
+### **Offset_Mês (INTEGER)**
+
+Diferença em meses em relação ao mês atual.
+
+### **Offset_Semana (INTEGER)**
+
+Diferença em semanas em relação à semana atual.
+
+### **Offset_Trimestre (INTEGER)**
+
+Diferença em trimestres em relação ao trimestre atual.
+
+### **Semana_Ano (INTEGER)**
+
+Número da semana dentro do ano.
+
+### **Semana_Atual (BOOLEAN)**
+
+Indica se a data pertence à semana atual.
+
+### **Semana_Completa (VARCHAR(15))**
+
+Combinação textual “Semana/ANO”, usada em dashboards.
+
+### **Semana_Mês (INTEGER)**
+
+Número da semana dentro do mês.
+
+### **Semana/Ano (VARCHAR(15))**
+
+Combinação textual da semana e do ano (ex.: Semana 12/2025).
+
+### **Trimestre (INTEGER)**
+
+Número do trimestre correspondente (1–4).
+
+### **Trimestre_Completo (VARCHAR(10))**
+
+Nome completo do trimestre (ex.: 1º Trimestre).
+
+### **Trimestre_Fiscal (INTEGER)**
+
+Trimestre conforme calendário fiscal da organização.
+
+### **Trimestre/Ano (VARCHAR(10))**
+
+Combinação textual entre trimestre e ano (ex.: T1/2025).
+
+**Tabela Técnica**  
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -372,8 +955,7 @@ Dimensão temporal fundamental. Cada linha representa uma data única, com atrib
 
 ## 🗂️ Tabela: `dCarteirizacao`
 
-**Descrição Geral**  
-Registra o relacionamento direto entre clientes, vendedores e lojas.
+**Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -385,8 +967,7 @@ Registra o relacionamento direto entre clientes, vendedores e lojas.
 
 ## 🎫 Tabela: `dCupons`
 
-**Descrição Geral**  
-Armazena informações sobre cupons promocionais.
+**Tabela Técnica** 
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -401,8 +982,7 @@ Armazena informações sobre cupons promocionais.
 
 ## 📱 Tabela: `dDispositivos`
 
-**Descrição Geral**  
-Armazena informações sobre dispositivos utilizados por clientes e vendedores.
+**Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -413,8 +993,7 @@ Armazena informações sobre dispositivos utilizados por clientes e vendedores.
 
 ## 🎉 Tabela: `dFeriados`
 
-**Descrição Geral**  
-Armazena informações de feriados e datas comemorativas.
+**Tabela Técnica** 
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -426,8 +1005,7 @@ Armazena informações de feriados e datas comemorativas.
 
 ## 👥 Tabela: `dGrupo_Cliente`
 
-**Descrição Geral**  
-Centraliza informações sobre agrupamento e categorização dos clientes.
+**Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -441,8 +1019,7 @@ Centraliza informações sobre agrupamento e categorização dos clientes.
 
 ## 💳 Tabela: `dMetodo_pagamento`
 
-**Descrição Geral**  
-Armazena os diferentes métodos de pagamento disponíveis.
+**Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -453,8 +1030,7 @@ Armazena os diferentes métodos de pagamento disponíveis.
 
 ## 🛍️ Tabela: `dOfertas`
 
-**Descrição Geral**  
-Centraliza informações sobre produtos ofertados.
+**Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -476,8 +1052,7 @@ Centraliza informações sobre produtos ofertados.
 
 ## 📊 Tabela: `dPeriodos`
 
-**Descrição Geral**  
-Armazena informações sobre períodos de análise temporal.
+**Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -489,8 +1064,7 @@ Armazena informações sobre períodos de análise temporal.
 
 ## 📦 Tabela: `dProdutos`
 
-**Descrição Geral**  
-Dimensão que concentra informações dos produtos comercializados.
+**Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -507,8 +1081,7 @@ Dimensão que concentra informações dos produtos comercializados.
 
 ## 📋 Tabela: `dStatus_pedido`
 
-**Descrição Geral**  
-Contém os status possíveis de um pedido.
+**Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -519,8 +1092,8 @@ Contém os status possíveis de um pedido.
 
 ## 🚚 Tabela: `dTipo_envio`
 
-**Descrição Geral**  
-Armazena os diferentes tipos de envio utilizados.
+ 
+**Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -531,8 +1104,7 @@ Armazena os diferentes tipos de envio utilizados.
 
 ## 📦 Tabela: `dTipo_pedido`
 
-**Descrição Geral**  
-Contém as classificações dos tipos de pedidos.
+**Tabela Técnica**  
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -543,9 +1115,7 @@ Contém as classificações dos tipos de pedidos.
 
 ## 🔐 Tabela: `fLogins`
 
-**Descrição Geral**  
-Registra todos os eventos de login realizados pelos usuários.
-
+**Tabela Técnica**
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
 | account_id                   | INTEGER          | Identificador único do usuário                                            | Chave Primária         |
@@ -561,9 +1131,7 @@ Registra todos os eventos de login realizados pelos usuários.
 
 ## 📈 Tabela: `fDatalayer_session_summary`
 
-**Descrição Geral**  
-Consolida dados de sessões de visitantes e usuários autenticados.
-
+**Tabela Técnica**
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
 | account_id                   | INTEGER          | Identificador do usuário                                                  | Chave Primária         |
@@ -579,10 +1147,9 @@ Consolida dados de sessões de visitantes e usuários autenticados.
 
 ---
 
-## 👀 Tabela: `fDatalayer_product_pageviews`
+## 📈 Tabela: `fDatalayer_product_pageviews`
 
-**Descrição Geral**  
-Armazena visualizações de página de produtos.
+**Tabela Técnica**  
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -606,8 +1173,7 @@ Armazena visualizações de página de produtos.
 
 ## 🛒 Tabela: `fCarrinhos_abandonados`
 
-**Descrição Geral**  
-Registra carrinhos de compras criados e não finalizados.
+**Tabela Técnica**   
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -629,8 +1195,7 @@ Registra carrinhos de compras criados e não finalizados.
 
 ## ⏱️ Tabela: `agg_last_login`
 
-**Descrição Geral**  
-Consolida informações do último login por usuário.
+**Tabela Técnica** 
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -643,8 +1208,7 @@ Consolida informações do último login por usuário.
 
 ## 🛍️ Tabela: `agg_last_purchase`
 
-**Descrição Geral**  
-Armazena informações sobre a última compra de cada cliente.
+**Tabela Técnica**   
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
@@ -661,8 +1225,8 @@ Aqui estão as tabelas faltantes documentadas em Markdown:
 
 ## 🏪 Tabela: `dLojas`
 
-**Descrição Geral**  
-Dimensão que armazena informações sobre lojas, unidades de negócio e pontos de venda. Cada registro representa uma loja única com dados cadastrais, geográficos e operacionais.
+**Tabela Técnica**  
+
 
 | Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |---------------------|--------------|------------------------------------------------|------------------------|
@@ -690,8 +1254,7 @@ Dimensão que armazena informações sobre lojas, unidades de negócio e pontos 
 
 ## 🌐 Tabela: `dSites`
 
-**Descrição Geral**  
-Dimensão que cataloga todos os sites, plataformas digitais e canais de venda online. Essencial para análises de desempenho por canal digital.
+**Tabela Técnica** 
 
 | Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |---------------------|--------------|------------------------------------------------|------------------------|
@@ -712,8 +1275,7 @@ Dimensão que cataloga todos os sites, plataformas digitais e canais de venda on
 
 ## 🏭 Tabela: `dFabricantes`
 
-**Descrição Geral**  
-Dimensão que armazena informações sobre fabricantes e marcas dos produtos comercializados. Fundamental para análises por marca e fornecedor.
+**Tabela Técnica**   
 
 | Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |---------------------|--------------|------------------------------------------------|------------------------|
@@ -733,8 +1295,7 @@ Dimensão que armazena informações sobre fabricantes e marcas dos produtos com
 
 ## 📂 Tabela: `dCategorias`
 
-**Descrição Geral**  
-Dimensão que define a hierarquia de categorização de produtos. Suporta estrutura multi-nível para organização do catálogo.
+**Tabela Técnica**   
 
 | Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |---------------------|--------------|------------------------------------------------|------------------------|
@@ -751,8 +1312,8 @@ Dimensão que define a hierarquia de categorização de produtos. Suporta estrut
 
 ## 💰 Tabela: `fVendas`
 
-**Descrição Geral**  
-Tabela fato principal que registra todas as transações de vendas. Cada linha representa um item de pedido vendido, com informações financeiras, quantitativas e de relacionamento.
+**Tabela Técnica**   
+
 
 | Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |-------------------------|--------------|------------------------------------------------|------------------------|
@@ -785,8 +1346,7 @@ Tabela fato principal que registra todas as transações de vendas. Cada linha r
 
 ## 🚚 Tabela: `fEntregas`
 
-**Descrição Geral**  
-Tabela fato que registra informações sobre o processo de entrega dos pedidos. Acompanha todo o ciclo logístico desde a expedição até a entrega ao cliente.
+**Tabela Técnica** 
 
 | Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |-------------------------|--------------|------------------------------------------------|------------------------|
@@ -815,8 +1375,7 @@ Tabela fato que registra informações sobre o processo de entrega dos pedidos. 
 
 ## 🔄 Tabelas de Relacionamento Adicionais:
 
-### `produto_categoria` (Tabela Ponte)
-**Descrição Geral:** Relacionamento muitos-para-muitos entre produtos e categorias.
+**Tabela Técnica** 
 
 | Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |---------------------|--------------|------------------------------------------------|------------------------|
@@ -834,14 +1393,11 @@ Tabela fato que registra informações sobre o processo de entrega dos pedidos. 
 | datekey             | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
 
 ---
-
-Você está absolutamente certo! Analisando novamente o documento original, identifiquei que **ainda faltam tabelas** que estão mencionadas no PDF mas não foram documentadas. Vou adicionar as que estão faltando:
-
 ---
 
 ## 🏪 Tabela: `dLojas`
 
-**Descrição Geral**  
+**Tabela Técnica** 
 Dimensão que armazena informações sobre lojas, unidades de negócio e pontos de venda. Cada registro representa uma loja única.
 
 | Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
@@ -866,8 +1422,7 @@ Dimensão que armazena informações sobre lojas, unidades de negócio e pontos 
 
 ## 🏷️ Tabela: `dSegmentacao` (Implícita)
 
-**Descrição Geral**  
-Dimensão que define os segmentos comerciais e categorizações utilizadas para clientes e vendedores.
+**Tabela Técnica**  
 
 | Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |-------------------------|--------------|------------------------------------------------|------------------------|
@@ -882,8 +1437,7 @@ Dimensão que define os segmentos comerciais e categorizações utilizadas para 
 
 ## 🏗️ Tabela: `dEstrutura_Comercial` (Implícita)
 
-**Descrição Geral**  
-Dimensão que define a estrutura hierárquica comercial da organização (divisões, regiões, áreas).
+**Tabela Técnica** 
 
 | Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |-------------------------|--------------|------------------------------------------------|------------------------|
@@ -899,8 +1453,7 @@ Dimensão que define a estrutura hierárquica comercial da organização (divis�
 
 ## 📦 Tabela: `dTransportadoras`
 
-**Descrição Geral**  
-Dimensão que armazena informações sobre transportadoras e serviços de entrega.
+**Tabela Técnica** 
 
 | Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |-------------------------|--------------|------------------------------------------------|------------------------|
@@ -918,8 +1471,7 @@ Dimensão que armazena informações sobre transportadoras e serviços de entreg
 
 ## 🎯 Tabela: `dCampanhas`
 
-**Descrição Geral**  
-Dimensão que armazena informações sobre campanhas de marketing e promoções.
+**Tabela Técnica** 
 
 | Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |-------------------------|--------------|------------------------------------------------|------------------------|
@@ -937,8 +1489,7 @@ Dimensão que armazena informações sobre campanhas de marketing e promoções.
 
 ## 🔄 Tabela: `fVendas_Detalhadas` (Alternativa à Ólendas)
 
-**Descrição Geral**  
-Tabela fato alternativa/detalhada para transações de vendas com granularidade adicional.
+**Tabela Técnica** 
 
 | Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |-------------------------|--------------|------------------------------------------------|------------------------|
@@ -956,8 +1507,7 @@ Tabela fato alternativa/detalhada para transações de vendas com granularidade 
 
 ## 📊 Tabela: `fMetas`
 
-**Descrição Geral**  
-Tabela fato que armazena metas e objetivos comerciais por vendedor, equipe ou região.
+**Tabela Técnica**   
 
 | Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
 |-------------------------|--------------|------------------------------------------------|------------------------|
