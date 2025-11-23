@@ -1,3 +1,5 @@
+<img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=007ACC&height=120&section=header"/>
+
 # Documentação do Modelo de Dados
 
 
@@ -1879,4 +1881,5 @@ Identificador do site onde a compra foi realizada.
 
 ---
 
+<img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=007ACC&height=120&section=footer"/>
 
