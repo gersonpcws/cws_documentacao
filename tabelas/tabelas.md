@@ -1,10 +1,166 @@
 # Documentação do Modelo de Dados
 
 
-## 📊 Tabela: `dvendedores`
+# 📊 Tabela: `dvendedores`
 
-**Descrição Geral**  
-Armazena informações cadastrais, hierárquicas, geográficas e comerciais dos vendedores. Cada registro representa um vendedor único.
+Aqui está o conteúdo transformado para **Markdown**, com estrutura organizada e limpa:
+
+---
+
+## 📌 Descrição Geral
+
+A tabela **dvendedores** é uma dimensão essencial do modelo de dados, responsável por armazenar as informações cadastrais, hierárquicas, geográficas e comerciais dos vendedores.
+Cada registro representa um vendedor único e centraliza os principais atributos relacionados ao seu perfil, canal de origem, área de atuação e relacionamento com clientes.
+Essa dimensão serve como base para análises de performance de vendas, acompanhamento de metas, segmentação comercial, hierarquias de equipe e cruzamentos com fatos de vendas, clientes e tempo.
+
+---
+
+## 📑 Descrição das Colunas
+
+### **account_id (INTEGER)**
+
+Identificador único do vendedor no sistema. Atua como chave primária da dimensão e é utilizado para junções com tabelas fato e outras dimensões.
+
+### **account_create_date (DATE)**
+
+Data de criação da conta do vendedor. Permite medir o tempo de atividade e histórico de ingresso no sistema.
+
+### **client_id (INTEGER)**
+
+Identificador do cliente principal vinculado ao vendedor. Usado como chave estrangeira em integrações com dimensões de clientes.
+
+### **client_status (BOOLEAN)**
+
+Indica se o cliente vinculado ao vendedor está ativo (**TRUE**) ou inativo (**FALSE**). Facilita análises de relacionamento e carteira ativa.
+
+### **account_origin (VARCHAR(50))**
+
+Canal de origem do cadastro do vendedor (ex.: aplicativo, plataforma web, integração).
+
+### **client_create_date (DATE)**
+
+Data de criação do cliente vinculado ao vendedor, usada para análises históricas de relacionamento.
+
+### **name (VARCHAR(150))**
+
+Nome completo ou razão social do vendedor.
+
+### **contact (VARCHAR(150))**
+
+Nome do contato principal do vendedor, utilizado para comunicações comerciais.
+
+### **account_user (VARCHAR(150))**
+
+Login ou e-mail de acesso à conta do vendedor, utilizado para auditoria e autenticação.
+
+### **document (VARCHAR(20))**
+
+Documento identificador do vendedor (CPF ou CNPJ), usado para validações fiscais e integração entre sistemas.
+
+### **gender (VARCHAR(20))**
+
+Gênero informado no cadastro, quando disponível.
+
+### **person_type (VARCHAR(10))**
+
+Tipo de pessoa jurídica: **PF** (Pessoa Física) ou **PJ** (Pessoa Jurídica).
+
+### **age (INTEGER)**
+
+Idade do vendedor, derivada da data de nascimento.
+
+### **country (VARCHAR(50))**
+
+País de origem ou atuação do vendedor.
+
+### **UF (VARCHAR(5))**
+
+Sigla da Unidade Federativa onde o vendedor está localizado (ex.: SP, RJ, MG).
+
+### **state (VARCHAR(50))**
+
+Nome completo do estado de atuação.
+
+### **region (VARCHAR(30))**
+
+Região geográfica associada à UF (ex.: Sul, Sudeste, Nordeste), utilizada em análises territoriais.
+
+### **city (VARCHAR(100))**
+
+Cidade principal de atuação do vendedor.
+
+### **zip_code (VARCHAR(15))**
+
+Código postal (CEP) do endereço comercial do vendedor.
+
+### **phone_number (VARCHAR(20))**
+
+Telefone principal de contato.
+
+### **CNAE (VARCHAR(15))**
+
+Código de atividade econômica cadastrado para o vendedor.
+
+### **wpp_opt_in (BOOLEAN)**
+
+Indica se o vendedor consentiu receber comunicações via WhatsApp.
+
+### **salesperson_account_id (INTEGER)**
+
+Identificador de outro vendedor ou gestor responsável (supervisor).
+
+### **salesperson_document (VARCHAR(20))**
+
+CPF do vendedor responsável, caso exista uma relação hierárquica.
+
+### **site_id (INTEGER)**
+
+Identificador do site, canal ou ambiente de origem do cadastro.
+
+### **client_last_updated (DATE)**
+
+Data da última atualização cadastral do vendedor.
+
+### **profile_picture (VARCHAR(255))**
+
+Endereço (URL) da imagem de perfil do vendedor.
+
+### **line (VARCHAR(50))**
+
+Linha comercial ou categoria de produtos que o vendedor representa.
+
+### **total_credit_limit (DECIMAL(18,2))**
+
+Limite total de crédito disponível para operações do vendedor.
+
+### **credit_balance (DECIMAL(18,2))**
+
+Saldo atual de crédito disponível.
+
+### **datekey (INTEGER)**
+
+Chave temporal no formato AAAAMMDD, usada para relacionamento com a dimensão de calendário.
+
+### **salesperson_code (VARCHAR(20))**
+
+Código interno do vendedor utilizado para integrações e identificações únicas.
+
+### **salesperson_document_code (VARCHAR(20))**
+
+CPF vinculado ao registro interno do vendedor no sistema.
+
+### **client_segment (VARCHAR(10))**
+
+Código de segmentação comercial do cliente vinculado ao vendedor (ex.: M1, Q4).
+
+### **segment_description (VARCHAR(100))**
+
+Descrição textual da segmentação comercial.
+
+### **division (VARCHAR(30))**
+
+Divisão comercial à qual o vendedor pertence (ex.: AUTO, METAL, MANUTENÇÃO).
+
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
 |------------------------------|------------------|---------------------------------------------------------------------------|------------------------|
