@@ -955,6 +955,39 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ## 🗂️ Tabela: `dCarteirizacao`
 
+## Descrição Geral
+
+A tabela **dCarteirizacao** registra o relacionamento direto entre clientes, vendedores e lojas dentro do ecossistema comercial.
+Cada linha representa uma relação ativa entre um cliente e o vendedor responsável por atendê-lo em uma determinada loja ou unidade de negócio.
+
+Essa dimensão é essencial para análises de carteirização comercial, permitindo identificar:
+
+* quais clientes estão vinculados a quais vendedores,
+* quais lojas ou unidades estão associadas ao atendimento,
+* como se distribui a base de clientes por carteira.
+
+Os dados dessa tabela são utilizados em cruzamentos com as dimensões **dClientes**, **dVendedores** e **dLojas**, além de se relacionar com tabelas fato, como **fVendas**, possibilitando análises de desempenho por carteira de clientes.
+
+---
+
+## Descrição das Colunas
+
+### **id_account_customer (INTEGER)**
+
+Identificador único do cliente associado à carteira.
+Relaciona-se diretamente com a chave primária **account_id** da tabela **dClientes**.
+
+### **id_account_seller (INTEGER)**
+
+Identificador único do vendedor responsável pelo cliente.
+Faz referência à chave primária **account_id** da tabela **dVendedores**.
+
+### **id_store (INTEGER)**
+
+Identificador da loja, unidade ou canal de venda associado à relação entre cliente e vendedor.
+Usado para análises por ponto de atendimento, performance regional e cobertura comercial.
+
+
 **Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -966,6 +999,47 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 ---
 
 ## 🎫 Tabela: `dCupons`
+
+## Descrição Geral
+
+A tabela **dCupons** é uma dimensão responsável por armazenar informações relacionadas a cupons promocionais utilizados em campanhas de vendas, e-commerce e programas de fidelidade.
+Cada registro representa um cupom único, com seus dados de identificação, período de validade, site de origem e vínculo com campanhas comerciais.
+Essa tabela é essencial para análises de desempenho de campanhas promocionais, controle de validade de cupons e mensuração do impacto de descontos sobre as vendas.
+
+---
+
+## Descrição das Colunas
+
+### **coupon_id (INTEGER)**
+
+Identificador único do cupom no sistema.
+Atua como chave primária da dimensão e permite o relacionamento com tabelas fato, como **fVendas**.
+
+### **code (VARCHAR(50))**
+
+Código alfanumérico do cupom aplicado na venda.
+Utilizado pelos clientes durante o checkout e em campanhas de marketing digital.
+
+### **campaign (VARCHAR(150))**
+
+Nome ou descrição da campanha promocional associada ao cupom.
+Permite identificar o contexto de uso e o objetivo comercial da promoção.
+
+### **datekey_begin (INTEGER)**
+
+Chave temporal no formato AAAAMMDD que indica a data de início da validade do cupom.
+Serve para relacionar o período ativo com a dimensão **dCalendario**.
+
+### **datekey_end (INTEGER)**
+
+Chave temporal no formato AAAAMMDD referente à data de término da validade do cupom.
+Usada para identificar o encerramento da promoção ou expiração do benefício.
+
+### **site_id (INTEGER)**
+
+Identificador do site, loja virtual ou canal de venda onde o cupom foi disponibilizado.
+Facilita análises de desempenho de cupons por canal de origem.
+
 
 **Tabela Técnica** 
 
@@ -982,6 +1056,26 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ## 📱 Tabela: `dDispositivos`
 
+## Descrição Geral
+
+A tabela **dDispositivos** armazena informações sobre os dispositivos utilizados por clientes e vendedores nas interações com as plataformas digitais.
+Seu principal objetivo é possibilitar análises de comportamento digital e desempenho de canais (como desktop, mobile e aplicativo), identificando o meio de acesso utilizado em vendas, cadastros ou navegação.
+
+---
+
+## Descrição das Colunas
+
+### **device_id (INTEGER)**
+
+Identificador único do dispositivo registrado.
+Atua como chave primária da dimensão e é utilizado como referência em tabelas fato.
+
+### **device (VARCHAR(50))**
+
+Nome ou categoria do dispositivo (por exemplo, Desktop, Mobile, App, Tablet).
+Permite classificar e agrupar interações por tipo de acesso.
+
+
 **Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -992,6 +1086,31 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 ---
 
 ## 🎉 Tabela: `dFeriados`
+
+## Descrição Geral
+
+A tabela **dFeriados** é uma dimensão auxiliar que armazena informações de feriados e datas comemorativas.
+Complementa a dimensão de tempo (**dCalendario**) e tem como finalidade indicar dias não úteis e períodos com impacto nas operações comerciais e logísticas.
+É utilizada em análises sazonais, projeções de demanda e comparativos de desempenho entre períodos com e sem feriados.
+
+---
+
+## Descrição das Colunas
+
+### **Data (DATE)**
+
+Data completa no formato ISO (YYYY-MM-DD), representando o dia do feriado.
+
+### **Dia_Semana (VARCHAR(15))**
+
+Nome do dia da semana correspondente à data.
+Usado para análises de distribuição e recorrência de feriados.
+
+### **Feriado (VARCHAR(100))**
+
+Nome ou descrição do feriado, como Natal, Carnaval ou Independência.
+Inclui feriados nacionais e regionais.
+
 
 **Tabela Técnica** 
 
@@ -1004,6 +1123,42 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 ---
 
 ## 👥 Tabela: `dGrupo_Cliente`
+
+## Descrição Geral
+
+A tabela **dGrupo_Cliente** centraliza informações sobre o agrupamento e a categorização dos clientes, de acordo com tipo de conta, documento fiscal e canal de origem.
+Cada registro representa um cliente vinculado ao tipo de cadastro e ao site de origem.
+Essa dimensão é utilizada para segmentar a base de clientes e realizar análises de comportamento, perfil e fidelização.
+
+---
+
+## Descrição das Colunas
+
+### **account_id (INTEGER)**
+
+Identificador único do cliente dentro do sistema.
+Atua como chave primária e é utilizado em relacionamentos com tabelas de vendas e cadastros.
+
+### **name (VARCHAR(150))**
+
+Nome completo ou razão social do cliente.
+Utilizado em relatórios e cadastros analíticos.
+
+### **document (VARCHAR(20))**
+
+Documento fiscal do cliente (CPF ou CNPJ).
+Utilizado para controle de duplicidades e identificação tributária.
+
+### **customer_type (VARCHAR(50))**
+
+Tipo de cliente — por exemplo, Pessoa Física, Pessoa Jurídica, Revendedor ou Distribuidor.
+Facilita a segmentação de análises.
+
+### **site_id (INTEGER)**
+
+Identificador do site ou canal de origem do cliente.
+Permite análises de captação e fidelização por plataforma.
+
 
 **Tabela Técnica**
 
@@ -1019,6 +1174,27 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ## 💳 Tabela: `dMetodo_pagamento`
 
+## Descrição Geral
+
+A tabela **dMetodo_pagamento** armazena os diferentes métodos de pagamento disponíveis nas transações realizadas.
+Seu objetivo é possibilitar a identificação e categorização dos meios de pagamento utilizados pelos clientes, permitindo análises financeiras e operacionais relacionadas à forma de quitação dos pedidos.
+Essa dimensão é fundamental para relatórios de vendas, controle de recebimentos e estudos sobre a preferência dos clientes quanto aos meios de pagamento.
+
+---
+
+## Descrição das Colunas
+
+### **payment_method_id (INTEGER)**
+
+Identificador único do método de pagamento.
+Atua como chave primária da dimensão e é utilizado em junções com a tabela fato de vendas.
+
+### **payment_method (VARCHAR(100))**
+
+Nome ou descrição do método de pagamento, como Cartão de Crédito, Boleto Bancário, PIX ou Transferência.
+Permite classificações e agrupamentos conforme a forma de pagamento utilizada.
+
+
 **Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -1029,6 +1205,80 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 ---
 
 ## 🛍️ Tabela: `dOfertas`
+
+## Descrição Geral
+
+A tabela **dOfertas** centraliza as informações sobre os produtos ofertados no ambiente comercial, tanto em canais diretos quanto em integrações com parceiros e associados.
+Cada registro representa uma oferta específica de produto, contendo dados sobre disponibilidade, preços, fornecedores e códigos de referência.
+Essa dimensão é essencial para análises de catálogo, monitoramento de estoque, performance de produtos e controle de variações comerciais entre parceiros.
+
+---
+
+## Descrição das Colunas
+
+### **associate_id (INTEGER)**
+
+Identificador do associado responsável pela oferta.
+Permite a vinculação com a dimensão de parceiros ou associados.
+
+### **partner_id (INTEGER)**
+
+Código do parceiro comercial que originou a oferta.
+Utilizado para rastrear a origem de produtos e acordos comerciais.
+
+### **company_name (VARCHAR(150))**
+
+Nome da empresa ou parceiro associado à oferta.
+Identifica o fornecedor responsável pelo produto.
+
+### **partner_part_code (VARCHAR(50))**
+
+Código interno do produto no sistema do parceiro comercial.
+Facilita o controle de equivalência entre catálogos.
+
+### **mfr_part_code (VARCHAR(50))**
+
+Código do fabricante original do produto.
+Utilizado em análises de procedência e integração com bases de fabricantes.
+
+### **sku_id (INTEGER)**
+
+Identificador único do SKU (Stock Keeping Unit) do produto.
+Serve como chave primária e elo entre diferentes dimensões de produto.
+
+### **sku_name (VARCHAR(150))**
+
+Nome ou descrição comercial do produto.
+Exibido em relatórios, dashboards e cadastros de oferta.
+
+### **unit_price (DECIMAL(18,2))**
+
+Preço unitário vigente da oferta.
+Usado em análises de margem, precificação e competitividade.
+
+### **quantity_available (INTEGER)**
+
+Quantidade disponível em estoque para a oferta.
+Indica a disponibilidade comercial e dá suporte a estratégias de venda.
+
+### **by_request (BOOLEAN)**
+
+Indica se o produto está disponível apenas sob solicitação.
+Usado para identificar itens de cotação ou venda restrita.
+
+### **datekey (INTEGER)**
+
+Chave temporal no formato AAAAMMDD que representa a data de referência da oferta.
+Utilizada para cruzamento com a dimensão **dCalendario**.
+
+### **sku_created_date (DATE)**
+
+Data de criação do SKU no sistema.
+Útil para acompanhar a entrada de novos produtos no portfólio.
+
+### **sku_last_updated (DATE)**
+
+Data da última atualização de informações da oferta (preço, estoque ou disponibilidade).
 
 **Tabela Técnica**
 
@@ -1052,6 +1302,33 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ## 📊 Tabela: `dPeriodos`
 
+# Tabela: dPeriodos
+
+## Descrição Geral
+
+A tabela **dPeriodos** armazena informações relacionadas aos períodos de análise temporal, sendo utilizada como dimensão auxiliar para segmentar dados por intervalo de tempo.
+Cada registro representa um período definido (como mês, trimestre, ano fiscal ou ciclo operacional), permitindo análises comparativas e agregações temporais em relatórios e dashboards.
+
+---
+
+## Descrição das Colunas
+
+### **Data (DATE)**
+
+Data de referência do período.
+Representa a data base associada a um determinado agrupamento temporal.
+
+### **Ordem (INTEGER)**
+
+Campo numérico que define a ordem sequencial do período.
+Utilizado para ordenações lógicas em relatórios e visualizações temporais.
+
+### **Periodo (VARCHAR(50))**
+
+Descrição textual do período (ex.: “Janeiro/2025”, “1º Trimestre/2024”).
+Facilita a identificação humana de intervalos de tempo.
+
+
 **Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -1063,6 +1340,55 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 ---
 
 ## 📦 Tabela: `dProdutos`
+
+# Tabela: dProdutos
+
+## Descrição Geral
+
+A tabela **dProdutos** é uma dimensão que concentra as informações dos produtos comercializados.
+Ela é utilizada para análises de desempenho por categoria, fabricante, linha e SKU (Stock Keeping Unit).
+Cada registro representa um produto único, identificado por um SKU, com hierarquias de categorização e códigos de referência.
+
+---
+
+## Descrição das Colunas
+
+### **sku_id (INTEGER)**
+
+Identificador único do produto.
+Atua como chave primária da dimensão e é usado em junções com tabelas fato de vendas e ofertas.
+
+### **sku_name (VARCHAR(150))**
+
+Nome comercial do produto.
+Utilizado em relatórios e dashboards de análise de portfólio.
+
+### **mfr_part_code (VARCHAR(50))**
+
+Código do fabricante original do produto.
+Usado para controle de equivalência e identificação de origem.
+
+### **manufacturer (VARCHAR(100))**
+
+Nome do fabricante responsável pelo produto.
+Facilita análises por marca ou fornecedor.
+
+### **category_level_1 (VARCHAR(100))**
+
+Nível principal de categorização do produto (ex.: Automotivo, Ferramentas).
+
+### **category_level_2 (VARCHAR(100))**
+
+Subcategoria intermediária (ex.: Elétrica, Manual).
+
+### **category_level_3 (VARCHAR(100))**
+
+Subnível mais específico de classificação do produto (ex.: Chave de Fenda, Multímetro).
+
+### **nivel (VARCHAR(20))**
+
+Define o nível hierárquico ou de classificação do produto dentro da estrutura comercial.
+
 
 **Tabela Técnica**
 
@@ -1081,6 +1407,26 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ## 📋 Tabela: `dStatus_pedido`
 
+## Descrição Geral
+
+A tabela **dStatus_pedido** contém os status possíveis de um pedido, desde sua criação até o faturamento, cancelamento ou conclusão.
+É utilizada como dimensão de referência para análises operacionais, acompanhamento do pipeline de vendas e monitoramento da performance de atendimento.
+
+---
+
+## Descrição das Colunas
+
+### **order_status_id (INTEGER)**
+
+Identificador único do status do pedido.
+Atua como chave primária e é utilizado como referência em tabelas fato de vendas.
+
+### **order_status (VARCHAR(100))**
+
+Nome ou descrição do status (ex.: Pendente, Faturado, Cancelado, Concluído).
+Permite classificações e agrupamentos por estágio do ciclo de pedido.
+
+
 **Tabela Técnica**
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -1091,6 +1437,27 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 ---
 
 ## 🚚 Tabela: `dTipo_envio`
+
+## Descrição Geral
+
+A tabela **dTipo_envio** armazena os diferentes tipos de envio utilizados nos pedidos realizados.
+Cada registro representa uma forma de entrega adotada no processo logístico, permitindo identificar como os produtos foram transportados até o cliente final.
+Essa dimensão é essencial para análises de eficiência logística, custos de frete, prazos de entrega e preferências de transporte.
+
+---
+
+## Descrição das Colunas
+
+### **shipping_type_id (INTEGER)**
+
+Identificador único do tipo de envio.
+Atua como chave primária da dimensão e é utilizado como referência em tabelas fato, como vendas e entregas.
+
+### **shipping_type (VARCHAR(100))**
+
+Nome ou descrição do tipo de envio (ex.: Correios, Transportadora, Retirada em Loja, Loggi).
+Permite segmentar os pedidos por modalidade de entrega e calcular tempos médios e custos associados.
+
 
  
 **Tabela Técnica**
@@ -1104,6 +1471,27 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ## 📦 Tabela: `dTipo_pedido`
 
+## Descrição Geral
+
+A tabela **dTipo_pedido** contém as classificações dos diferentes tipos de pedidos registrados no sistema.
+Cada registro representa uma categoria de operação comercial, permitindo distinguir entre vendas normais, devoluções, amostras ou transferências internas.
+Essa dimensão é utilizada para análises de volume de pedidos por tipo, controle operacional e segmentação de indicadores de faturamento e logística.
+
+---
+
+## Descrição das Colunas
+
+### **order_type_id (INTEGER)**
+
+Identificador único do tipo de pedido.
+Atua como chave primária e é utilizado para relacionar os registros com tabelas fato de vendas.
+
+### **order_type (VARCHAR(100))**
+
+Nome ou descrição do tipo de pedido (ex.: Venda Normal, Devolução, Amostra, Transferência).
+Usado para relatórios e indicadores operacionais que segmentam os pedidos por natureza.
+
+
 **Tabela Técnica**  
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -1114,6 +1502,49 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 ---
 
 ## 🔐 Tabela: `fLogins`
+
+## Descrição Geral
+
+A tabela **fLogins** registra todos os eventos de login realizados pelos usuários da plataforma.
+Cada linha representa uma tentativa de autenticação bem-sucedida, contendo informações sobre o tipo de conta, data e origem do acesso.
+Essa tabela é fundamental para análises de engajamento, frequência de uso e comportamento de acesso entre diferentes tipos de usuários (clientes, vendedores, parceiros, administradores).
+
+---
+
+## Descrição das Colunas
+
+### **account_id (INTEGER)**
+
+Identificador único da conta do usuário que realizou o login.
+
+### **account_type (VARCHAR(50))**
+
+Tipo de conta vinculada ao login (ex.: cliente, vendedor, parceiro).
+
+### **account_user (VARCHAR(150))**
+
+Nome de usuário ou e-mail utilizado para acessar o sistema.
+
+### **datekey (INTEGER)**
+
+Chave temporal no formato AAAAMMDD correspondente à data do login.
+
+### **document (VARCHAR(20))**
+
+CPF ou CNPJ vinculado à conta.
+
+### **login_date (DATE)**
+
+Data e hora em que o login foi realizado.
+
+### **login_type (VARCHAR(50))**
+
+Método de autenticação utilizado (ex.: senha, SSO, token).
+
+### **site_id (INTEGER)**
+
+Identificador do site ou domínio em que o login ocorreu.
+
 
 **Tabela Técnica**
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -1130,6 +1561,57 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 ---
 
 ## 📈 Tabela: `fDatalayer_session_summary`
+
+## Descrição Geral
+
+A tabela **fDatalayer_session_summary** consolida os dados de sessões de visitantes e usuários autenticados.
+Cada registro representa um resumo de sessão, contendo a duração total, o tipo de usuário e o status de login.
+Essas informações são essenciais para medir engajamento digital, duração média de visitas e taxa de conversão por sessão.
+
+---
+
+## Descrição das Colunas
+
+### **account_id (INTEGER)**
+
+Identificador do usuário (autenticado ou visitante).
+
+### **datekey (INTEGER)**
+
+Chave temporal da sessão no formato AAAAMMDD.
+
+### **session (VARCHAR(100))**
+
+Código único que identifica a sessão.
+
+### **session_time_in_seconds (INTEGER)**
+
+Duração total da sessão em segundos.
+
+### **site_id (INTEGER)**
+
+Identificador do site onde a sessão ocorreu.
+
+### **user_type (VARCHAR(50))**
+
+Tipo de usuário (visitante, cliente, vendedor).
+
+### **vendor_id (INTEGER)**
+
+Identificador do vendedor, quando aplicável.
+
+### **vendor_isloggedin (BOOLEAN)**
+
+Indica se o vendedor estava autenticado durante a sessão.
+
+### **visitor_id (INTEGER)**
+
+Identificador do visitante anônimo.
+
+### **visitor_isloggedin (BOOLEAN)**
+
+Indica se o visitante realizou login durante a sessão.
+
 
 **Tabela Técnica**
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -1148,6 +1630,68 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 ---
 
 ## 📈 Tabela: `fDatalayer_product_pageviews`
+
+## Descrição Geral
+
+A tabela **fDatalayer_product_pageviews** armazena as visualizações de páginas de produtos no ambiente digital.
+Cada linha representa uma interação de um visitante ou usuário autenticado com a página de um produto específico.
+Essa tabela possibilita análises de comportamento, interesse por produtos e eficiência de campanhas de exposição.
+
+---
+
+## Descrição das Colunas
+
+### **account_id (INTEGER)**
+
+Identificador do usuário que visualizou o produto.
+
+### **datekey (INTEGER)**
+
+Chave de data da visualização no formato AAAAMMDD.
+
+### **datekey_max_datecreated / datekey_min_datecreated (INTEGER)**
+
+Datas de início e fim da visualização, utilizadas para medir a duração da interação.
+
+### **distinct_count_session (INTEGER)**
+
+Quantidade de sessões distintas em que o produto foi visualizado.
+
+### **max_datecreated_time / min_datecreated_time (TIMESTAMP)**
+
+Horários exatos da primeira e da última visualização do produto.
+
+### **site_id (INTEGER)**
+
+Identificador do site no qual a visualização ocorreu.
+
+### **sku_id (INTEGER)**
+
+Identificador do produto visualizado.
+
+### **vendor_id (INTEGER)**
+
+Identificador do vendedor associado ao produto.
+
+### **vendor_email (VARCHAR(100))**
+
+E-mail do vendedor.
+
+### **vendor_isloggedin (BOOLEAN)**
+
+Indica se o vendedor estava autenticado no momento da visualização.
+
+### **visitor_id (INTEGER)**
+
+Identificador do visitante.
+
+### **visitor_email (VARCHAR(100))**
+
+E-mail do visitante, quando disponível.
+
+### **visitor_isloggedin (BOOLEAN)**
+
+Indica se o visitante estava autenticado no momento da visualização.
 
 **Tabela Técnica**  
 
@@ -1173,6 +1717,68 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ## 🛒 Tabela: `fCarrinhos_abandonados`
 
+## Descrição Geral
+
+A tabela **fCarrinhos_abandonados** registra os carrinhos de compras iniciados e não finalizados.
+Cada registro representa uma instância de abandono, contendo informações sobre cliente, produto, quantidade e valor.
+Ela serve como base para estratégias de remarketing, análise de conversão e estudos de comportamento de compra.
+
+---
+
+## Descrição das Colunas
+
+### **cart_type (VARCHAR(50))**
+
+Tipo de carrinho (ex.: regular, promoção, pré-venda).
+
+### **client_account_id (INTEGER)**
+
+Identificador da conta do cliente que iniciou o carrinho.
+
+### **data (DATE)**
+
+Data da criação ou do abandono do carrinho.
+
+### **datekey (INTEGER)**
+
+Chave temporal associada à data da criação/abandono (AAAAMMDD).
+
+### **device_id (VARCHAR(50))**
+
+Identificador do dispositivo utilizado.
+
+### **mfr_part_code (VARCHAR(50))**
+
+Código do fabricante do produto.
+
+### **partner (VARCHAR(100))**
+
+Nome do parceiro associado à venda ou ao produto.
+
+### **quantity (INTEGER)**
+
+Quantidade de produtos adicionados ao carrinho.
+
+### **session_id (VARCHAR(100))**
+
+Código da sessão em que o carrinho foi criado.
+
+### **site_id (INTEGER)**
+
+Identificador do site ou plataforma de origem.
+
+### **sku_id (INTEGER)**
+
+Código identificador do produto no carrinho.
+
+### **sku_name (VARCHAR(150))**
+
+Nome comercial do produto.
+
+### **unit_price (DECIMAL(18,2))**
+
+Valor unitário do produto no momento da criação do carrinho.
+
 **Tabela Técnica**   
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -1195,6 +1801,33 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ## ⏱️ Tabela: `agg_last_login`
 
+## Descrição Geral
+
+A tabela **agg_last_login** consolida as informações do último login realizado por cada usuário.
+É uma tabela agregada utilizada para calcular métricas de recorrência, inatividade e engajamento.
+Cada registro contém a data do último acesso, o status do login e a quantidade de dias desde o último login.
+
+---
+
+## Descrição das Colunas
+
+### **account_id (INTEGER)**
+
+Identificador do usuário.
+
+### **days_since_last_login (INTEGER)**
+
+Quantidade de dias desde o último login.
+
+### **login_status (VARCHAR(20))**
+
+Status atual do login (ex.: ativo, inativo).
+
+### **site_id (INTEGER)**
+
+Identificador do site ou domínio vinculado ao acesso.
+
+
 **Tabela Técnica** 
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -1208,6 +1841,33 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ## 🛍️ Tabela: `agg_last_purchase`
 
+## Descrição Geral
+
+A tabela **agg_last_purchase** armazena informações sobre a última compra realizada por cada cliente.
+Ela é utilizada para análises de frequência de compra, detecção de inatividade e segmentação RFM (Recência, Frequência, Valor Monetário).
+Cada linha representa o último evento de compra do cliente, contendo a quantidade de dias desde a transação e o status da conta na plataforma.
+
+---
+
+## Descrição das Colunas
+
+### **account_id (INTEGER)**
+
+Identificador do cliente.
+
+### **days_since_last_purchase (INTEGER)**
+
+Número de dias desde a última compra realizada.
+
+### **plataform_status (VARCHAR(50))**
+
+Status da conta na plataforma (ex.: ativo, inativo).
+
+### **site_id (INTEGER)**
+
+Identificador do site onde a compra foi realizada.
+
+
 **Tabela Técnica**   
 
 | Nome da Coluna               | Tipo de Dado     | Descrição                                                                 | Chave / Relacionamento |
@@ -1219,307 +1879,4 @@ Combinação textual entre trimestre e ano (ex.: T1/2025).
 
 ---
 
-Aqui estão as tabelas faltantes documentadas em Markdown:
-
----
-
-## 🏪 Tabela: `dLojas`
-
-**Tabela Técnica**  
-
-
-| Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|---------------------|--------------|------------------------------------------------|------------------------|
-| store_id            | INTEGER      | Identificador único da loja                    | Chave Primária         |
-| store_name          | VARCHAR(100) | Nome comercial da loja                         | —                      |
-| trading_name        | VARCHAR(100) | Nome fantasia                                  | —                      |
-| company_name        | VARCHAR(150) | Razão social completa                          | —                      |
-| document            | VARCHAR(20)  | CNPJ da loja                                   | —                      |
-| phone_number        | VARCHAR(20)  | Telefone de contato                            | —                      |
-| email               | VARCHAR(100) | E-mail comercial                               | —                      |
-| country             | VARCHAR(50)  | País de localização                            | —                      |
-| UF                  | VARCHAR(5)   | Unidade Federativa                             | —                      |
-| state               | VARCHAR(50)  | Estado completo                                | —                      |
-| city                | VARCHAR(100) | Cidade                                         | —                      |
-| zip_code            | VARCHAR(15)  | Código postal (CEP)                            | —                      |
-| street_address      | VARCHAR(255) | Endereço completo                              | —                      |
-| store_status        | VARCHAR(20)  | Status da loja (Ativa/Inativa)                 | —                      |
-| store_type          | VARCHAR(50)  | Tipo de loja (Física/Virtual/Franquia)         | —                      |
-| opening_date        | DATE         | Data de inauguração                            | —                      |
-| closing_date        | DATE         | Data de fechamento (se aplicável)              | —                      |
-| salesperson_account_id | INTEGER   | Vendedor responsável pela loja                 | Chave Estrangeira      |
-| datekey             | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 🌐 Tabela: `dSites`
-
-**Tabela Técnica** 
-
-| Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|---------------------|--------------|------------------------------------------------|------------------------|
-| site_id             | INTEGER      | Identificador único do site                    | Chave Primária         |
-| site_name           | VARCHAR(100) | Nome do site/plataforma                        | —                      |
-| site_url            | VARCHAR(255) | URL completa do site                           | —                      |
-| site_type           | VARCHAR(50)  | Tipo de site (E-commerce, Marketplace, App)    | —                      |
-| platform            | VARCHAR(50)  | Plataforma tecnológica                         | —                      |
-| site_status         | VARCHAR(20)  | Status do site (Ativo/Inativo/Manutenção)      | —                      |
-| launch_date         | DATE         | Data de lançamento do site                     | —                      |
-| country             | VARCHAR(50)  | País de operação do site                       | —                      |
-| default_currency    | VARCHAR(10)  | Moeda padrão do site                           | —                      |
-| default_language    | VARCHAR(10)  | Idioma padrão do site                          | —                      |
-| timezone            | VARCHAR(50)  | Fuso horário do site                           | —                      |
-| datekey             | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 🏭 Tabela: `dFabricantes`
-
-**Tabela Técnica**   
-
-| Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|---------------------|--------------|------------------------------------------------|------------------------|
-| manufacturer_id     | INTEGER      | Identificador único do fabricante              | Chave Primária         |
-| manufacturer_name   | VARCHAR(100) | Nome do fabricante                             | —                      |
-| manufacturer_code   | VARCHAR(50)  | Código interno do fabricante                   | —                      |
-| document            | VARCHAR(20)  | CNPJ do fabricante                             | —                      |
-| country             | VARCHAR(50)  | País de origem                                 | —                      |
-| contact_name        | VARCHAR(150) | Nome do contato principal                      | —                      |
-| contact_email       | VARCHAR(100) | E-mail de contato                              | —                      |
-| contact_phone       | VARCHAR(20)  | Telefone de contato                            | —                      |
-| manufacturer_status | VARCHAR(20)  | Status do fabricante (Ativo/Inativo)           | —                      |
-| partnership_date    | DATE         | Data de início da parceria                     | —                      |
-| datekey             | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 📂 Tabela: `dCategorias`
-
-**Tabela Técnica**   
-
-| Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|---------------------|--------------|------------------------------------------------|------------------------|
-| category_id         | INTEGER      | Identificador único da categoria               | Chave Primária         |
-| category_name       | VARCHAR(100) | Nome da categoria                              | —                      |
-| category_level      | INTEGER      | Nível hierárquico (1, 2, 3)                   | —                      |
-| parent_category_id  | INTEGER      | ID da categoria pai (para subcategorias)       | Chave Estrangeira      |
-| category_path       | VARCHAR(255) | Caminho completo da categoria                  | —                      |
-| category_description| VARCHAR(255) | Descrição da categoria                         | —                      |
-| category_status     | VARCHAR(20)  | Status da categoria (Ativa/Inativa)            | —                      |
-| datekey             | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 💰 Tabela: `fVendas`
-
-**Tabela Técnica**   
-
-
-| Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|-------------------------|--------------|------------------------------------------------|------------------------|
-| sales_id                | INTEGER      | Identificador único da venda                   | Chave Primária         |
-| order_id                | INTEGER      | Número do pedido                               | —                      |
-| order_item_id           | INTEGER      | Identificador do item no pedido                | —                      |
-| datekey                 | INTEGER      | Data da venda (AAAAMMDD)                       | Chave Estrangeira      |
-| datekey_faturamento     | INTEGER      | Data de faturamento (AAAAMMDD)                 | Chave Estrangeira      |
-| client_account_id       | INTEGER      | Cliente comprador                              | Chave Estrangeira      |
-| salesperson_account_id  | INTEGER      | Vendedor responsável                           | Chave Estrangeira      |
-| store_id                | INTEGER      | Loja/unidade de venda                          | Chave Estrangeira      |
-| site_id                 | INTEGER      | Site/canal de origem                           | Chave Estrangeira      |
-| sku_id                  | INTEGER      | Produto vendido                                | Chave Estrangeira      |
-| quantity                | INTEGER      | Quantidade vendida                             | —                      |
-| unit_price              | DECIMAL(18,2)| Preço unitário                                 | —                      |
-| total_amount            | DECIMAL(18,2)| Valor total do item                            | —                      |
-| discount_value          | DECIMAL(18,2)| Valor de desconto aplicado                     | —                      |
-| tax_amount              | DECIMAL(18,2)| Valor de impostos                              | —                      |
-| shipping_amount         | DECIMAL(18,2)| Valor do frete                                 | —                      |
-| net_amount              | DECIMAL(18,2)| Valor líquido da venda                         | —                      |
-| payment_method_id       | INTEGER      | Método de pagamento                            | Chave Estrangeira      |
-| order_status_id         | INTEGER      | Status do pedido                               | Chave Estrangeira      |
-| order_type_id           | INTEGER      | Tipo do pedido                                 | Chave Estrangeira      |
-| shipping_type_id        | INTEGER      | Tipo de envio                                  | Chave Estrangeira      |
-| coupon_id               | INTEGER      | Cupom aplicado                                 | Chave Estrangeira      |
-| invoice_number          | VARCHAR(50)  | Número da nota fiscal                          | —                      |
-| device_id               | INTEGER      | Dispositivo utilizado                          | Chave Estrangeira      |
-
----
-
-## 🚚 Tabela: `fEntregas`
-
-**Tabela Técnica** 
-
-| Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|-------------------------|--------------|------------------------------------------------|------------------------|
-| delivery_id             | INTEGER      | Identificador único da entrega                 | Chave Primária         |
-| sales_id                | INTEGER      | Venda associada                                | Chave Estrangeira      |
-| order_id                | INTEGER      | Número do pedido                               | —                      |
-| datekey_expedicao       | INTEGER      | Data de expedição (AAAAMMDD)                   | Chave Estrangeira      |
-| datekey_entrega         | INTEGER      | Data de entrega (AAAAMMDD)                     | Chave Estrangeira      |
-| client_account_id       | INTEGER      | Cliente destinatário                           | Chave Estrangeira      |
-| shipping_type_id        | INTEGER      | Tipo de envio                                  | Chave Estrangeira      |
-| carrier_id              | INTEGER      | Transportadora                                 | Chave Estrangeira      |
-| tracking_number         | VARCHAR(100) | Código de rastreamento                         | —                      |
-| shipping_status         | VARCHAR(30)  | Status da entrega                              | —                      |
-| expected_days           | INTEGER      | Prazo esperado de entrega (dias)               | —                      |
-| actual_days             | INTEGER      | Prazo real de entrega (dias)                   | —                      |
-| shipping_cost           | DECIMAL(18,2)| Custo do frete                                 | —                      |
-| shipping_charged        | DECIMAL(18,2)| Valor cobrado pelo frete                       | —                      |
-| delivery_address        | VARCHAR(255) | Endereço de entrega                            | —                      |
-| delivery_city           | VARCHAR(100) | Cidade de entrega                              | —                      |
-| delivery_UF             | VARCHAR(5)   | UF de entrega                                  | —                      |
-| delivery_zip_code       | VARCHAR(15)  | CEP de entrega                                 | —                      |
-| recipient_name          | VARCHAR(150) | Nome do destinatário                           | —                      |
-| recipient_document      | VARCHAR(20)  | CPF/CNPJ do destinatário                       | —                      |
-
----
-
-## 🔄 Tabelas de Relacionamento Adicionais:
-
-**Tabela Técnica** 
-
-| Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|---------------------|--------------|------------------------------------------------|------------------------|
-| sku_id              | INTEGER      | Identificador do produto                       | Chave Estrangeira      |
-| category_id         | INTEGER      | Identificador da categoria                     | Chave Estrangeira      |
-| datekey             | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
-### `vendedor_loja` (Tabela Ponte)
-**Descrição Geral:** Relacionamento entre vendedores e lojas que atendem.
-
-| Nome da Coluna      | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|---------------------|--------------|------------------------------------------------|------------------------|
-| salesperson_account_id | INTEGER   | Identificador do vendedor                      | Chave Estrangeira      |
-| store_id            | INTEGER      | Identificador da loja                          | Chave Estrangeira      |
-| datekey             | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
----
-
-## 🏪 Tabela: `dLojas`
-
-**Tabela Técnica** 
-Dimensão que armazena informações sobre lojas, unidades de negócio e pontos de venda. Cada registro representa uma loja única.
-
-| Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|-------------------------|--------------|------------------------------------------------|------------------------|
-| store_id                | INTEGER      | Identificador único da loja                    | Chave Primária         |
-| store_name              | VARCHAR(100) | Nome comercial da loja                         | —                      |
-| store_type              | VARCHAR(50)  | Tipo de loja (Física/Virtual)                  | —                      |
-| store_status            | VARCHAR(20)  | Status da loja (Ativa/Inativa)                 | —                      |
-| phone_number            | VARCHAR(20)  | Telefone de contato                            | —                      |
-| email                   | VARCHAR(100) | E-mail comercial                               | —                      |
-| country                 | VARCHAR(50)  | País de localização                            | —                      |
-| UF                      | VARCHAR(5)   | Unidade Federativa                             | —                      |
-| state                   | VARCHAR(50)  | Estado completo                                | —                      |
-| city                    | VARCHAR(100) | Cidade                                         | —                      |
-| zip_code                | VARCHAR(15)  | Código postal (CEP)                            | —                      |
-| street_address          | VARCHAR(255) | Endereço completo                              | —                      |
-| opening_date            | DATE         | Data de inauguração                            | —                      |
-| salesperson_account_id  | INTEGER      | Vendedor responsável pela loja                 | Chave Estrangeira      |
-| datekey                 | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 🏷️ Tabela: `dSegmentacao` (Implícita)
-
-**Tabela Técnica**  
-
-| Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|-------------------------|--------------|------------------------------------------------|------------------------|
-| segment_id              | INTEGER      | Identificador único do segmento                | Chave Primária         |
-| segment_code            | VARCHAR(10)  | Código do segmento (ex.: M1, Q4)              | —                      |
-| segment_description     | VARCHAR(100) | Descrição textual do segmento                  | —                      |
-| segment_type            | VARCHAR(50)  | Tipo de segmentação (Cliente/Vendedor)         | —                      |
-| criteria                | VARCHAR(255) | Critérios de segmentação                       | —                      |
-| datekey                 | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 🏗️ Tabela: `dEstrutura_Comercial` (Implícita)
-
-**Tabela Técnica** 
-
-| Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|-------------------------|--------------|------------------------------------------------|------------------------|
-| structure_id            | INTEGER      | Identificador único da estrutura               | Chave Primária         |
-| division                | VARCHAR(30)  | Divisão comercial (ex.: AUTO, METAL)           | —                      |
-| region                  | VARCHAR(30)  | Região geográfica                              | —                      |
-| area                    | VARCHAR(50)  | Área comercial                                 | —                      |
-| hierarchy_level         | INTEGER      | Nível hierárquico                              | —                      |
-| parent_structure_id     | INTEGER      | ID da estrutura pai                            | Chave Estrangeira      |
-| datekey                 | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 📦 Tabela: `dTransportadoras`
-
-**Tabela Técnica** 
-
-| Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|-------------------------|--------------|------------------------------------------------|------------------------|
-| carrier_id              | INTEGER      | Identificador único da transportadora          | Chave Primária         |
-| carrier_name            | VARCHAR(100) | Nome da transportadora                         | —                      |
-| carrier_type            | VARCHAR(50)  | Tipo de serviço (Expresso, Econômico)          | —                      |
-| document                | VARCHAR(20)  | CNPJ da transportadora                         | —                      |
-| contact_phone           | VARCHAR(20)  | Telefone de contato                            | —                      |
-| service_level           | VARCHAR(30)  | Nível de serviço                               | —                      |
-| coverage_area           | VARCHAR(255) | Área de cobertura                              | —                      |
-| carrier_status          | VARCHAR(20)  | Status da transportadora                       | —                      |
-| datekey                 | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 🎯 Tabela: `dCampanhas`
-
-**Tabela Técnica** 
-
-| Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|-------------------------|--------------|------------------------------------------------|------------------------|
-| campaign_id             | INTEGER      | Identificador único da campanha                | Chave Primária         |
-| campaign_name           | VARCHAR(150) | Nome da campanha                               | —                      |
-| campaign_type           | VARCHAR(50)  | Tipo de campanha                               | —                      |
-| start_date              | DATE         | Data de início                                 | —                      |
-| end_date                | DATE         | Data de término                                | —                      |
-| target_audience         | VARCHAR(100) | Público-alvo                                   | —                      |
-| budget                  | DECIMAL(18,2)| Orçamento da campanha                          | —                      |
-| campaign_status         | VARCHAR(20)  | Status da campanha                             | —                      |
-| datekey                 | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 🔄 Tabela: `fVendas_Detalhadas` (Alternativa à Ólendas)
-
-**Tabela Técnica** 
-
-| Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|-------------------------|--------------|------------------------------------------------|------------------------|
-| sales_detail_id         | INTEGER      | Identificador único do detalhe                 | Chave Primária         |
-| sales_id                | INTEGER      | ID da venda principal                          | Chave Estrangeira      |
-| sku_id                  | INTEGER      | Produto vendido                                | Chave Estrangeira      |
-| quantity                | INTEGER      | Quantidade vendida                             | —                      |
-| unit_price              | DECIMAL(18,2)| Preço unitário                                 | —                      |
-| discount_value          | DECIMAL(18,2)| Valor de desconto                              | —                      |
-| tax_amount              | DECIMAL(18,2)| Valor de impostos                              | —                      |
-| line_total              | DECIMAL(18,2)| Total da linha                                 | —                      |
-| datekey                 | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
-
-## 📊 Tabela: `fMetas`
-
-**Tabela Técnica**   
-
-| Nome da Coluna          | Tipo de Dado | Descrição                                      | Chave / Relacionamento |
-|-------------------------|--------------|------------------------------------------------|------------------------|
-| goal_id                 | INTEGER      | Identificador único da meta                    | Chave Primária         |
-| account_id              | INTEGER      | Vendedor/equipe                                | Chave Estrangeira      |
-| goal_type               | VARCHAR(50)  | Tipo de meta (Vendas, Clientes)                | —                      |
-| target_value            | DECIMAL(18,2)| Valor da meta                                  | —                      |
-| actual_value            | DECIMAL(18,2)| Valor realizado                                | —                      |
-| goal_period             | VARCHAR(20)  | Período da meta (Mensal, Trimestral)           | —                      |
-| start_date              | DATE         | Data de início                                 | —                      |
-| end_date                | DATE         | Data de término                                | —                      |
-| datekey                 | INTEGER      | Chave temporal (AAAAMMDD)                      | Chave Estrangeira      |
-
----
 
